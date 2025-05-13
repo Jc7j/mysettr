@@ -7,9 +7,9 @@ import { Button } from "~/components/ui";
 import { ROUTES } from "~/lib/utils";
 
 const Header = () => {
-  const { user, isLoaded } = useUser();
+  const { isSignedIn } = useUser();
 
-  const dashboardHref = isLoaded && user ? "/dashboard" : ROUTES.AUTH.SIGNIN;
+  const dashboardHref = isSignedIn ? "/dashboard" : ROUTES.AUTH.SIGNIN;
 
   return (
     <header className="border-border/40 bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur">
@@ -40,10 +40,8 @@ const Header = () => {
         </nav>
 
         <div className="flex items-center justify-end space-x-4">
-          <Button asChild disabled={!isLoaded}>
-            <Link href={dashboardHref}>
-              {isLoaded ? "Open Dashboard" : "Loading..."}
-            </Link>
+          <Button asChild disabled={!isSignedIn}>
+            <Link href={dashboardHref}>Open Dashboard</Link>
           </Button>
         </div>
       </div>
