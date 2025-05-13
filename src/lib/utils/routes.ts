@@ -4,4 +4,8 @@ export const ROUTES = {
     SIGNUP: "/sign-up",
     SIGNIN: "/sign-in",
   },
+  PROTECTED: {
+    DASHBOARD: "/dashboard",
+    ASSISTANTS: "/assistants",
+  },
 } as const;
