@@ -53,7 +53,7 @@ export async function POST(req: Request) {
   }
 
   if (evt.type === "user.created") {
-    const { id: clerkId, email_addresses } = evt.data;
+    const { id: clerkId, email_addresses, first_name, last_name } = evt.data;
     const email = email_addresses[0]?.email_address;
 
     if (!email) {
@@ -88,6 +88,7 @@ export async function POST(req: Request) {
         data: {
           id: clerkId,
           email,
+          name: `${first_name} ${last_name}`,
         },
       }),
     );
