@@ -4,12 +4,10 @@ import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
-import Header from "~/components/marketing/Header";
 
 export const metadata: Metadata = {
   title: "MySettr",
   description: "MySettr",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
 const geist = Geist({
@@ -24,12 +22,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className={`${geist.variable}`}>
         <body>
-          <TRPCReactProvider>
-            <div className="relative flex min-h-screen flex-col">
-              <Header />
-              <main className="container flex-1 py-8">{children}</main>
-            </div>
-          </TRPCReactProvider>
+          <TRPCReactProvider>{children}</TRPCReactProvider>
         </body>
       </html>
     </ClerkProvider>

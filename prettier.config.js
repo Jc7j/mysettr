@@ -13,4 +13,5 @@ export default {
   importOrder: ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
+  tailwindConfig: "./tailwind.config.js",
 };
