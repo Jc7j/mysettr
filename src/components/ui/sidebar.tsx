@@ -15,6 +15,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useClerk } from "@clerk/nextjs";
 import {
   Avatar,
   AvatarFallback,
@@ -84,6 +85,7 @@ export function SessionNavBar({
 }: SessionNavBarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
+  const { signOut } = useClerk();
 
   return (
     <motion.div
@@ -125,7 +127,7 @@ export function SessionNavBar({
                   <div className="flex min-w-0 items-center gap-2">
                     <Avatar className="size-5 shrink-0">
                       <AvatarFallback>
-                        {fullName?.charAt(0) ?? "U"}
+                        {fullName?.charAt(0)?.toUpperCase() ?? "U"}
                       </AvatarFallback>
                     </Avatar>
                     <motion.div
@@ -178,9 +180,12 @@ export function SessionNavBar({
                     <UserCircle className="mr-2 h-4 w-4" /> Profile
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="hover:bg-muted focus:bg-muted dark:hover:bg-gray-700 dark:focus:bg-gray-700">
-                  <LogOut className="mr-2 h-4 w-4 text-gray-900 dark:text-white" />{" "}
-                  <span className="text-gray-900 dark:text-white">
+                <DropdownMenuItem
+                  onClick={() => signOut()}
+                  className="cursor-pointer hover:bg-red-100 focus:bg-red-100 dark:hover:bg-red-700/30 dark:focus:bg-red-700/30"
+                >
+                  <LogOut className="mr-2 h-4 w-4 text-red-600 dark:text-red-500" />
+                  <span className="font-medium text-red-600 dark:text-red-500">
                     Sign out
                   </span>
                 </DropdownMenuItem>
@@ -188,7 +193,6 @@ export function SessionNavBar({
             </DropdownMenu>
           </div>
 
-          {/* Navigation Body - Standardized padding */}
           <div className="flex grow flex-col overflow-hidden pt-1">
             <ScrollArea className="flex-grow px-3 py-1">
               <div className={cn("flex w-full flex-col gap-1")}>
