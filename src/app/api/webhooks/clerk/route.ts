@@ -4,6 +4,7 @@ import { type WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { Webhook } from "svix";
 import { env } from "~/env";
+import { stripe } from "~/lib/stripe/stripe";
 import { tryCatch } from "~/lib/utils";
 import { db } from "~/server/db";
 
@@ -67,14 +68,20 @@ export async function POST(req: Request) {
       return new Response("User exists", { status: 200 });
     }
 
-    // Create new Stripe customer
-    // const customer = await stripe.customers.create({
-    //   email,
-    //   description: "User",
-    //   metadata: {
-    //     userId: clerkId,
-    //   },
-    // });
+    const { error: stripeError } = await tryCatch(
+      stripe.customers.create({
+        email,
+        description: "User",
+        metadata: {
+          userId: clerkId,
+        },
+      }),
+    );
+
+    if (stripeError) {
+      console.error("Error: Could not create customer:", stripeError);
+      return new Response("Error: Could not create customer", { status: 400 });
+    }
 
     const { error } = await tryCatch(
       db.user.create({

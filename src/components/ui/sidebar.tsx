@@ -18,7 +18,6 @@ import { useState } from "react";
 import {
   Avatar,
   AvatarFallback,
-  Badge,
   Button,
   DropdownMenu,
   DropdownMenuContent,
@@ -71,20 +70,20 @@ const navItems = [
     label: "Assistants",
     icon: MessagesSquare,
     activeCheck: ROUTES.PROTECTED.ASSISTANTS,
-    beta: true,
   },
 ];
 
-export function SessionNavBar() {
+interface SessionNavBarProps {
+  fullName: string;
+  primaryEmailAddress: string;
+}
+
+export function SessionNavBar({
+  fullName,
+  primaryEmailAddress,
+}: SessionNavBarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
-  // Placeholder user data, replace with actual data from Clerk
-  const user = {
-    fullName: "Jane Doe",
-    primaryEmailAddress: { emailAddress: "jane.doe@example.com" },
-    firstName: "Jane",
-    lastName: "Doe",
-  };
 
   return (
     <motion.div
@@ -102,7 +101,6 @@ export function SessionNavBar() {
       >
         <motion.ul variants={staggerVariants} className="flex h-full flex-col">
           <div className="flex w-full shrink-0 flex-col px-3 py-2">
-            {" "}
             <motion.div
               variants={variants}
               className="mb-3 overflow-hidden"
@@ -118,18 +116,6 @@ export function SessionNavBar() {
                 </Link>
               )}
             </motion.div>
-            <motion.div
-              variants={variants}
-              className="mb-1 overflow-hidden"
-              initial={isCollapsed ? "closed" : "open"}
-              animate={isCollapsed ? "closed" : "open"}
-            >
-              {!isCollapsed && (
-                <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
-                  Account
-                </p>
-              )}
-            </motion.div>
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger className="w-full" asChild>
                 <Button
@@ -139,7 +125,7 @@ export function SessionNavBar() {
                   <div className="flex min-w-0 items-center gap-2">
                     <Avatar className="size-5 shrink-0">
                       <AvatarFallback>
-                        {user?.firstName?.charAt(0) ?? "J"}
+                        {fullName?.charAt(0) ?? "U"}
                       </AvatarFallback>
                     </Avatar>
                     <motion.div
@@ -148,8 +134,7 @@ export function SessionNavBar() {
                     >
                       {!isCollapsed && (
                         <p className="truncate text-sm">
-                          {user?.primaryEmailAddress?.emailAddress ??
-                            "jane.doe@example.com"}
+                          {primaryEmailAddress}
                         </p>
                       )}
                     </motion.div>
@@ -169,17 +154,15 @@ export function SessionNavBar() {
                 <div className="flex flex-row items-center gap-2 p-2">
                   <Avatar className="size-8">
                     <AvatarFallback>
-                      {(user?.firstName?.charAt(0) ?? "") +
-                        (user?.lastName?.charAt(0) ?? "")}
+                      {fullName?.charAt(0) ?? "U"}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col text-left">
                     <span className="text-sm font-medium text-gray-900 dark:text-white">
-                      {user?.fullName ?? "Jane Doe"}
+                      {fullName}
                     </span>
                     <span className="text-muted-foreground line-clamp-1 text-xs">
-                      {user?.primaryEmailAddress?.emailAddress ??
-                        "jane.doe@example.com"}
+                      {primaryEmailAddress}
                     </span>
                   </div>
                 </div>
@@ -208,8 +191,6 @@ export function SessionNavBar() {
           {/* Navigation Body - Standardized padding */}
           <div className="flex grow flex-col overflow-hidden pt-1">
             <ScrollArea className="flex-grow px-3 py-1">
-              {" "}
-              {/* Consistent px-3 */}
               <div className={cn("flex w-full flex-col gap-1")}>
                 {navItems.map((item) => (
                   <Link
@@ -229,16 +210,6 @@ export function SessionNavBar() {
                       {!isCollapsed && (
                         <div className="flex items-center gap-2">
                           <p className="text-sm font-medium">{item.label}</p>
-                          {item.beta && (
-                            <Badge
-                              className={cn(
-                                "flex h-fit w-fit items-center gap-1.5 rounded border-none bg-blue-50 px-1.5 text-xs text-blue-600 dark:bg-blue-600 dark:text-blue-200",
-                              )}
-                              variant="outline"
-                            >
-                              BETA
-                            </Badge>
-                          )}
                         </div>
                       )}
                     </motion.div>
